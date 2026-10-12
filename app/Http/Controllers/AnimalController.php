@@ -14,34 +14,22 @@ use Illuminate\Validation\Rule;
 
 class AnimalController extends Controller
 {
-    public function index(Request $request): View
+    public function index(): View
     {
-        $query = Animal::query()
-            ->where('is_adopted', false)
-            ->orderBy('name');
-
-        // Filtre par espèce si la valeur est connue
-        $species = $request->query('espece');
-
-        if ($species !== null) {
-            $knownSpecies = collect(Species::cases())
-                ->contains(fn($case) => $case->value === $species);
-
-            if ($knownSpecies) {
-                $query->where('species', $species);
-            }
-        }
-
-        $animals = $query->get();
+        $animals = Animal::with(['shelter', 'tags'])
+            ->whereNull('adopted_at')
+            ->orderBy('name')
+            ->get();
 
         return view('animals.index', compact('animals'));
     }
 
-    public function show(Animal $animal): View
+    public function show(int $id): View
     {
-        $animal->load(['shelter', 'tags']);
+        $animal = Animal::with(['shelter', 'tags'])
+            ->findOrFail($id);
 
-        return view('animal.show', ['animal' => $animal]);
+        return view('animals.show', compact('animal'));
     }
 
     public function create(): View

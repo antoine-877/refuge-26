@@ -1,5 +1,5 @@
-<div>
 
+<div>
     <h1>Liste des animaux</h1>
 
     @if (session('status'))
@@ -7,20 +7,18 @@
     @endif
 
     @if ($animals->isEmpty())
-        <p>Aucun animal enregistré.</p>
+        <p>Aucun animal</p>
     @else
         @foreach ($animals as $animal)
             <article>
                 <h2>{{ $animal->name }}</h2>
 
                 <p>
-                    Espèce :
-                    {{ $animal->species->value }}
+                    Espèce : {{ $animal->species->value }}
                 </p>
 
                 <p>
-                    Refuge :
-                    {{ $animal->shelter->name }}
+                    Refuge : {{ $animal->shelter->name }}
                 </p>
 
                 <p>
@@ -33,6 +31,7 @@
                 </p>
 
                 <p>Traits :</p>
+
                 @forelse ($animal->tags as $tag)
                     <span>{{ $tag->name }}</span>
                 @empty
@@ -44,13 +43,13 @@
                 @endif
 
                 <p>
-                    <a href="{{ route('animal.show', $animal) }}">
+                    <a href="{{ route('animals.show', $animal) }}">
                         Voir la fiche
                     </a>
                 </p>
             </article>
+
             <hr>
         @endforeach
     @endif
-
 </div>
