@@ -3,7 +3,7 @@
 
     <p>
         Espèce :
-        {{ ucfirst($animal->species?->value ?? 'Inconnue') }}
+        {{ $animal->species->label() }}
     </p>
 
     <p>
